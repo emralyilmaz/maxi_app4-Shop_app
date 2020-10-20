@@ -1,4 +1,6 @@
+import 'package:app4_shop_app/providers/products.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   // final String title;
@@ -10,9 +12,13 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productId = ModalRoute.of(context).settings.arguments as String; // id
+    final loadedProduct =
+        Provider.of<Products>(context, listen: false).findById(productId);
+    // (listen: false) yalnızca global veri deponuzdan veri almak istiyorsunuz,
+    // ancak güncellemelerle ilgilenmiyorsunuz, o zaman dinlemenize gerek yok.
     return Scaffold(
       appBar: AppBar(
-        title: Text("title"),
+        title: Text(loadedProduct.title),
       ),
     );
   }
