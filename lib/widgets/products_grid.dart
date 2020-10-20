@@ -7,6 +7,8 @@ class ProductsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<Products>(context);
+    // listen: true default olarak. yeni bir ürünüm olduğunda veya
+    // ürünlerim bir şekilde değiştiğinde gridi yeniden inşa etmek istiyorum.
     final products = productsData.items;
     return GridView.builder(
         padding: const EdgeInsets.all(10),
