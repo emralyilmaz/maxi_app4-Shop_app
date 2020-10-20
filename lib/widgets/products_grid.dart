@@ -21,7 +21,14 @@ class ProductsGrid extends StatelessWidget {
             mainAxisSpacing: 10),
         // SliverGridDelegateWithFixedCrossAxisCount ile belirli miktarda sütuna sahip olmak istediğimi tanımlayabilirim
         // ve bu kriterlerin karşılanması için öğeleri ekrana sıkıştırır.
-        itemBuilder: (ctx, i) => ProductItem(
-            products[i].id, products[i].title, products[i].imageUrl));
+        itemBuilder: (ctx, i) => ChangeNotifierProvider(
+              create: (c) => products[i],
+              child: ProductItem(
+                  // products[i].id,
+                  // products[i].title,
+                  // products[i].imageUrl
+
+                  ),
+            ));
   }
 }
