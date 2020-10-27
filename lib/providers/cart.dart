@@ -59,6 +59,11 @@ class Cart with ChangeNotifier {
     _items.remove(productId);
     notifyListeners();
   }
+
+  void clear() {
+    _items = {};
+    notifyListeners();
+  }
 }
 
 // NOT1: provider paketiyle kullanmayı planladığım ve
