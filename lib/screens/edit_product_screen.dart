@@ -45,6 +45,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
 // bununla istediğinizi yapmanıza,
 // örneğin tüm metin girişlerini toplayan global bir haritada saklamanıza izin veren bir yöntemi tetikleyecektir.
   void _saveForm() {
+    final isValid = _form.currentState.validate();
+    if (!isValid) {
+      return;
+    }
     _form.currentState.save();
     // save(): form widget'ının durum nesnesi tarafından sağlanan bir yöntemdir,
     // so temelde bu formu kaydedecek form widget'ı için Flutter tarafından sağlanan bir yöntemdir.
@@ -79,6 +83,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_priceFocusNode);
                   },
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Please provide a value";
+                    }
+                    return null;
+                  },
                   onSaved: (value) {
                     _editedProduct = Product(
                         id: null,
@@ -95,6 +105,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     FocusScope.of(context).requestFocus(_descriptionFocusNode);
                   },
                   focusNode: _priceFocusNode,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Please provide a value";
+                    }
+                    return null;
+                  },
                   onSaved: (value) {
                     _editedProduct = Product(
                         id: null,
@@ -108,6 +124,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
                   focusNode: _descriptionFocusNode,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Please provide a value";
+                    }
+                    return null;
+                  },
                   onSaved: (value) {
                     _editedProduct = Product(
                         id: null,
@@ -143,6 +165,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         controller: _imageUrlController,
                         focusNode: _imageUrlFocusNode,
                         onFieldSubmitted: (_) => {_saveForm()},
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please provide a value";
+                          }
+                          return null;
+                        },
                         onSaved: (value) {
                           _editedProduct = Product(
                               id: null,
