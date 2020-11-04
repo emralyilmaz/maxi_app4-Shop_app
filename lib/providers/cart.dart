@@ -6,11 +6,12 @@ class CartItem {
   final int quantity;
   final double price;
 
-  CartItem(
-      {@required this.id,
-      @required this.title,
-      @required this.quantity,
-      @required this.price});
+  CartItem({
+    @required this.id,
+    @required this.title,
+    @required this.quantity,
+    @required this.price,
+  });
 }
 
 class Cart with ChangeNotifier {
@@ -32,24 +33,31 @@ class Cart with ChangeNotifier {
     return total;
   }
 
-  void addItem(String productId, double price, String title) {
+  void addItem(
+    String productId,
+    double price,
+    String title,
+  ) {
     if (_items.containsKey(productId)) {
-      // change quaintity...
+      // change quantity...
       _items.update(
-          productId,
-          (existingCardItem) => CartItem(
-              id: existingCardItem.id,
-              title: existingCardItem.title,
-              quantity: existingCardItem.quantity + 1,
-              price: existingCardItem.price));
+        productId,
+        (existingCartItem) => CartItem(
+          id: existingCartItem.id,
+          title: existingCartItem.title,
+          price: existingCartItem.price,
+          quantity: existingCartItem.quantity + 1,
+        ),
+      );
     } else {
       _items.putIfAbsent(
         productId,
         () => CartItem(
-            id: DateTime.now().toString(),
-            title: title,
-            quantity: 1,
-            price: price),
+          id: DateTime.now().toString(),
+          title: title,
+          price: price,
+          quantity: 1,
+        ),
       );
     }
     notifyListeners();
@@ -68,10 +76,11 @@ class Cart with ChangeNotifier {
       _items.update(
           productId,
           (existingCartItem) => CartItem(
-              id: existingCartItem.id,
-              title: existingCartItem.title,
-              quantity: existingCartItem.quantity - 1,
-              price: existingCartItem.price));
+                id: existingCartItem.id,
+                title: existingCartItem.title,
+                price: existingCartItem.price,
+                quantity: existingCartItem.quantity - 1,
+              ));
     } else {
       _items.remove(productId);
     }
@@ -83,7 +92,6 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 }
-
 // NOT1: provider paketiyle kullanmayı planladığım ve
 // güncellemeleri dinleyen widget'ları bilgilendirmek istediğim için,
 // burada widgets.dart'tan da içe aktarabileceğiniz mixin olan ChangeNotifier'ı ekledik.

@@ -1,44 +1,49 @@
-import 'package:app4_shop_app/providers/cart.dart';
+import 'package:app4_shop_app/providers/cart.dart' show Cart;
 import 'package:app4_shop_app/providers/orders.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:app4_shop_app/widgets/cart_item.dart' as ci;
+import 'package:app4_shop_app/widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
-  static const routeName = "/cart";
+  static const routeName = '/cart';
+
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Your Cart"),
+        title: Text('Your Cart'),
       ),
       body: Column(
-        children: [
+        children: <Widget>[
           Card(
             margin: EdgeInsets.all(15),
             child: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   Text(
-                    "Total",
+                    'Total',
                     style: TextStyle(fontSize: 20),
                   ),
                   Spacer(),
                   Chip(
                     label: Text(
-                      "\$ ${cart.totalAmount.toStringAsFixed(2)}",
-                      style: TextStyle(color: Colors.white),
+                      '\$${cart.totalAmount.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
                   FlatButton(
-                    child: Text("Ordeer Now"),
+                    child: Text('ORDER NOW'),
                     onPressed: () {
                       Provider.of<Orders>(context, listen: false).addOrder(
-                          cart.items.values.toList(), cart.totalAmount);
+                        cart.items.values.toList(),
+                        cart.totalAmount,
+                      );
                       cart.clear();
                     },
                     textColor: Theme.of(context).primaryColor,
@@ -47,18 +52,17 @@ class CartScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
+          SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
               itemCount: cart.items.length,
-              itemBuilder: (ctx, i) => ci.CartItem(
-                  cart.items.values.toList()[i].id,
-                  cart.items.keys.toList()[i],
-                  cart.items.values.toList()[i].price,
-                  cart.items.values.toList()[i].quantity,
-                  cart.items.values.toList()[i].title),
+              itemBuilder: (ctx, i) => CartItem(
+                cart.items.values.toList()[i].id,
+                cart.items.keys.toList()[i],
+                cart.items.values.toList()[i].price,
+                cart.items.values.toList()[i].quantity,
+                cart.items.values.toList()[i].title,
+              ),
             ),
           )
         ],
