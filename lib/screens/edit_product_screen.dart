@@ -89,19 +89,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
 // _saveForm: artık her textformfieldda, metin formu alanına girilen değeri almanıza ve
 // bununla istediğinizi yapmanıza,
 // örneğin tüm metin girişlerini toplayan global bir haritada saklamanıza izin veren bir yöntemi tetikleyecektir.
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
     }
     _form.currentState.save();
-    // save(): form widget'ının durum nesnesi tarafından sağlanan bir yöntemdir,
-    // so temelde bu formu kaydedecek form widget'ı için Flutter tarafından sağlanan bir yöntemdir.
-
     setState(() {
       _isLoading = true;
     });
-
     if (_editedProduct.id != null) {
       Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
@@ -110,16 +106,32 @@ class _EditProductScreenState extends State<EditProductScreen> {
       });
       Navigator.of(context).pop();
     } else {
-      Provider.of<Products>(context, listen: false)
-          .addProduct(_editedProduct)
-          .then((_) {
+      try {
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('An error occurred!'),
+            content: Text('Something went wrong.'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          ),
+        );
+      } finally {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
-      });
+      }
     }
-    // Navigator.of(context).pop();
   }
 
   @override
@@ -171,7 +183,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       initialValue: _initValues['price'],
                       decoration: InputDecoration(labelText: 'Price'),
                       textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
+                      // keyboardType: TextInputType.number,
                       focusNode: _priceFocusNode,
                       onFieldSubmitted: (_) {
                         FocusScope.of(context)

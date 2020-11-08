@@ -65,32 +65,58 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> addProduct(Product product) {
-    const url = "https://shopapp-maxi.firebaseio.com/products.json";
-    return http
-        .post(
-      url,
-      body: json.encode({
-        "title": product.title,
-        "desciption": product.description,
-        "imageUrl": product.imageUrl,
-        "price": product.price,
-        "isFavorite": product.isFavorite
-      }),
-    )
-        .then((response) {
+  Future<void> fetchAndSetProducts() async {
+    const url = 'https://shopapp-maxi.firebaseio.com/products.json';
+    try {
+      final response = await http.get(url);
+      // final extractedData =
       print(json.decode(response.body));
+      //  as Map<String, dynamic>;
+      // final List<Product> loadedProducts = [];
+      // extractedData.forEach((prodId, prodData) {
+      //   loadedProducts.add(Product(
+      //     id: prodId,
+      //     title: prodData['title'],
+      //     description: prodData['description'],
+      //     price: prodData['price'],
+      //     isFavorite: prodData['isFavorite'],
+      //     imageUrl: prodData['imageUrl'],
+      //   ));
+      // });
+      // _items = loadedProducts;
+      // notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<void> addProduct(Product product) async {
+    const url = 'https://shopapp-maxi.firebaseio.com/products.json';
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }),
+      );
       final newProduct = Product(
         title: product.title,
         description: product.description,
         price: product.price,
         imageUrl: product.imageUrl,
-        id: json.decode(response.body)["name"],
+        id: json.decode(response.body)['name'],
       );
       _items.add(newProduct);
       // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
-    });
+    } catch (error) {
+      print(error);
+      throw error;
+    }
   }
 
   void updateProduct(String id, Product newProduct) {
