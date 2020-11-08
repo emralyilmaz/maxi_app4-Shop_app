@@ -142,7 +142,7 @@ class Products with ChangeNotifier {
     _items.removeAt(existingProductIndex);
     notifyListeners();
     http.delete(url).then((response) {
-      print(response.statusCode);
+      if (response.statusCode >= 400) {}
       existingProduct = null;
     }).catchError((_) {
       _items.insert(existingProductIndex, existingProduct);
