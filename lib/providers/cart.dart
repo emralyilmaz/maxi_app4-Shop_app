@@ -92,6 +92,7 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 }
+
 // NOT1: provider paketiyle kullanmayı planladığım ve
 // güncellemeleri dinleyen widget'ları bilgilendirmek istediğim için,
 // burada widgets.dart'tan da içe aktarabileceğiniz mixin olan ChangeNotifier'ı ekledik.

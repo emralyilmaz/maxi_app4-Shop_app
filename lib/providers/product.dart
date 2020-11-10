@@ -20,8 +20,8 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  void _setFavValue(bool newValeu) {
-    isFavorite = newValeu;
+  void _setFavValue(bool newValue) {
+    isFavorite = newValue;
     notifyListeners();
   }
 
@@ -31,10 +31,12 @@ class Product with ChangeNotifier {
     notifyListeners();
     final url = 'https://shopapp-maxi.firebaseio.com/products/$id.json';
     try {
-      final response = await http.patch(url,
-          body: json.encode({
-            "isFavorite": isFavorite,
-          }));
+      final response = await http.patch(
+        url,
+        body: json.encode({
+          'isFavorite': isFavorite,
+        }),
+      );
       if (response.statusCode >= 400) {
         _setFavValue(oldStatus);
       }
