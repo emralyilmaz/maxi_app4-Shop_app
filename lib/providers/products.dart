@@ -70,9 +70,13 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     var url =
-        'https://shopapp-maxi.firebaseio.com/products.json?auth=$authToken';
+        'https://shopapp-maxi.firebaseio.com/products.json?auth=$authToken&$filterString';
+    // &orderBy="creatorId"&equalTo="$userId": bu işlem Firebase'e aslında içerik oluşturucu kimliğine göre filtrelemek istediğinizi
+    // ve yalnızca kullanıcı kimliğinize eşit olduğunda yalnızca bu girişlerin döndürülmesi gerektiğini söyler.
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -114,6 +118,7 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
+          "creatorId": userId,
         }),
       );
       final newProduct = Product(
