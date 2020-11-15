@@ -105,12 +105,12 @@ class _AuthCardState extends State<AuthCard> {
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _emailController.text = "test@test.com";
-    _passwordController.text = "123456";
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _emailController.text = "test@test.com";
+  //   _passwordController.text = "123456";
+  // }
 
   void _showErrorDialog(String message) {
     showDialog(
